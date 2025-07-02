@@ -64,7 +64,7 @@ defmodule Exonerate.Remote do
         Schema.ingest(binary, caller, resource, opts)
 
       error ->
-        raise "failed to read from the local file #{uri}: #{error}"
+        raise "failed to read from the local file #{inspect(uri)}: #{inspect(error)}"
     end
 
     :ok
