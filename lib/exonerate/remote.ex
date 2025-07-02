@@ -52,7 +52,7 @@ defmodule Exonerate.Remote do
     uri
   end
 
-  defp load_cache(_, uri = %{scheme: "function"}, _) do
+  defp load_cache(_, uri = %{scheme: "exonerate"}, _) do
     raise "function resources can't loaded, (tried to load #{uri})"
   end
 
