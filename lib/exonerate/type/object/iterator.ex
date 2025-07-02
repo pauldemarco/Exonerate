@@ -68,6 +68,13 @@ defmodule Exonerate.Type.Object.Iterator do
           end
       end
 
+    filters =
+      [
+        quote do
+          visited = false
+        end
+      ] ++ filters
+
     cond do
       Object.needs_seen?(context) ->
         build_seen(call, visitor_call, filters, opts[:tracked])
@@ -114,8 +121,6 @@ defmodule Exonerate.Type.Object.Iterator do
 
         Enum.reduce_while(object, {:ok, seen}, fn
           {key, value}, {:ok, seen} ->
-            visited = false
-
             with unquote_splicing(filters) do
               {:cont, {:ok, MapSet.put(seen, key)}}
             else
@@ -161,8 +166,6 @@ defmodule Exonerate.Type.Object.Iterator do
 
   defp with_expression(filters, visitor_call) do
     quote do
-      visited = false
-
       with unquote_splicing(filters) do
         result =
           if key in seen or visited do
@@ -212,8 +215,6 @@ defmodule Exonerate.Type.Object.Iterator do
 
         Enum.reduce_while(object, :ok, fn
           {key, value}, :ok ->
-            visited = false
-
             with unquote_splicing(filters) do
               {:cont, unquote(visitor_call)(value, Path.join(path, key))}
             else
@@ -236,8 +237,6 @@ defmodule Exonerate.Type.Object.Iterator do
 
         Enum.reduce_while(object, {:ok, MapSet.new()}, fn
           {key, value}, {:ok, seen} ->
-            visited = false
-
             with unquote_splicing(filters) do
               seen =
                 if visited do
