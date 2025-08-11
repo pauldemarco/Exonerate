@@ -71,7 +71,9 @@ defmodule Exonerate.Type.Object.Iterator do
     filters =
       [
         quote do
-          visited = false
+          # Compiler hack to silence "visited = false" warnings.
+          # See issue: https://github.com/E-xyza/Exonerate/issues/87#issuecomment-3173574414
+          visited = 0 > 1
         end
       ] ++ filters
 
